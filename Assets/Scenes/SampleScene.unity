@@ -3159,7 +3159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 8702267591945840823}
   myAnim: {fileID: 3140660260008009660}
-  speed: 5
+  speed: 10
+  shift: 2
 --- !u!1 &8710243894943332018
 GameObject:
   m_ObjectHideFlags: 0
