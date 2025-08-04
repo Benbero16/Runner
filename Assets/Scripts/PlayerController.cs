@@ -10,6 +10,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public bool isLeft, isMiddle, isRight;
     [HideInInspector] public string denemeforgizleme;
     [System.NonSerialized] public string denemeforgizleme_2;
+    int score;
+    //bool ile sürünmeden kurtulalım
+    public bool isDeath;
+
+
     void notlar()
     {
 
@@ -79,13 +84,9 @@ public class PlayerController : MonoBehaviour
     }
     void MoveCharacter()
     {
+        if (isDeath) return;
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
-        
-
-
-
-        // 1.yöntem
+ // 1.yöntem
         #region karakter sınırlama
         if (Input.GetKeyDown(KeyCode.A) && transform.position.x > -0.5f)
         {
@@ -103,6 +104,7 @@ public class PlayerController : MonoBehaviour
     {
         isMiddle = true;
         // transform.position= new Vector3 (0, 0, 5);
+        myAnim.SetBool("Run", true);
     }
 
     // Update is called once per frame
@@ -112,6 +114,29 @@ public class PlayerController : MonoBehaviour
 
 MoveCharacter();
     }
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("kaktus_1"))
+        {
+            Debug.Log("kaktus_1 çarptı" + other.gameObject.name);
+        
+            myAnim.SetBool("Death" , true);
+            isDeath = true;
+        }
+
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("money"))
+        {
+            Destroy(other.gameObject);
+            score += 10;
+            Debug.Log("Puan: " + score);
+            // Burada para toplama puanını artırabilirsin
+        }
+    }
+
+
 
     private void FixedUpdate()
     {
