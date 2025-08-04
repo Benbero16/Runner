@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using DG.Tweening;
 public class PlayerController : MonoBehaviour
 {
     [Header("Elements")]
@@ -90,12 +90,13 @@ public class PlayerController : MonoBehaviour
         #region karakter sınırlama
         if (Input.GetKeyDown(KeyCode.A) && transform.position.x > -0.5f)
         {
-            transform.Translate(new Vector3(-shift, 0, 0));
+            //transform.Translate(shift, 0, 0);
+            transform.DOMoveX(transform.position.x - shift, 0.5f);
         }
+
         else if (Input.GetKeyDown(KeyCode.D) && transform.position.x < 0.5f)
         {
-            transform.Translate(shift, 0, 0);
-
+            transform.DOMoveX(transform.position.x + shift, 0.5f);
         }
         #endregion
     }
