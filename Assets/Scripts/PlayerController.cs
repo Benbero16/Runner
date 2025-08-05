@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     int score;
     //bool ile sürünmeden kurtulalım
     public bool isDeath;
-
+ 
 
     void notlar()
     {
@@ -78,6 +78,30 @@ public class PlayerController : MonoBehaviour
                }
                transform.Translate(new Vector3(shift, 0, 0));
            }
+        // Blok indexlerini kullanarak karakteri tam blok ortasına hizalayın
+int currentLane = 1; // 0: sol, 1: orta, 2: sağ
+float[] lanePositions = { -2f, 0f, 2f }; // Blokların x konumları
+
+void MoveCharacter()
+{
+    if (isDeath) return;
+    transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+    if (Input.GetKeyDown(KeyCode.A) && currentLane > 0)
+    {
+        currentLane--;
+        transform.DOMoveX(lanePositions[currentLane], 0.5f).SetEase(Ease.Linear);
+    }
+    else if (Input.GetKeyDown(KeyCode.D) && currentLane < lanePositions.Length - 1)
+    {
+        currentLane++;
+        transform.DOMoveX(lanePositions[currentLane], 0.5f).SetEase(Ease.Linear);
+    }
+}
+
+
+
+
 
            */
 
@@ -86,18 +110,22 @@ public class PlayerController : MonoBehaviour
     {
         if (isDeath) return;
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
- // 1.yöntem
+        // 1.yöntem
         #region karakter sınırlama
         if (Input.GetKeyDown(KeyCode.A) && transform.position.x > -0.5f)
         {
             //transform.Translate(shift, 0, 0);
-            transform.DOMoveX(transform.position.x - shift, 0.5f);
+
+            transform.DOMoveX(transform.position.x - shift, 0.5f).SetEase(Ease.Linear);
+
         }
 
         else if (Input.GetKeyDown(KeyCode.D) && transform.position.x < 0.5f)
         {
-            transform.DOMoveX(transform.position.x + shift, 0.5f);
+
+            transform.DOMoveX(transform.position.x + shift, 0.5f).SetEase(Ease.Linear);
         }
+
         #endregion
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -136,7 +164,7 @@ MoveCharacter();
             // Burada para toplama puanını artırabilirsin
         }
     }
-
+  
 
 
     private void FixedUpdate()
