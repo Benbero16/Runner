@@ -5,15 +5,17 @@ public class PlayerController : MonoBehaviour
     [Header("Elements")]
     [SerializeField] Rigidbody rb;
     [SerializeField] public Animator myAnim;
-    [Tooltip("bu değişken oyuncunun hızını ifade eder.")] [SerializeField] public float speed;
-    [Tooltip("bu değişken karakterin sağa ve sola x*2 kadar hareketini sağlar ")] [SerializeField] public float shift = 2; 
+    [Tooltip("bu değişken oyuncunun hızını ifade eder.")][SerializeField] public float speed;
+    [Tooltip("bu değişken karakterin sağa ve sola x*2 kadar hareketini sağlar ")][SerializeField] public float shift = 2;
     [SerializeField] public bool isLeft, isMiddle, isRight;
     [HideInInspector] public string denemeforgizleme;
     [System.NonSerialized] public string denemeforgizleme_2;
-    int score;
+    public int score;
     //bool ile sürünmeden kurtulalım
-    public bool isDeath;
- 
+    public bool isDead;
+    //oyun başladığında karakterin hareket etmemesi için
+    [HideInInspector] public bool isStart;//public olmasının nedeni daha sonra buna UI managerda erişilmesi gerektiğidir.
+    [SerializeField] public float floatScore;
 
     void notlar()
     {
@@ -108,7 +110,19 @@ void MoveCharacter()
     }
     void MoveCharacter()
     {
-        if (isDeath) return;
+
+
+        if (!isStart) return;
+
+        if (isDead) return;
+
+        floatScore += Time.deltaTime;
+
+        if (floatScore > 1)
+        {
+            score += 1;
+            floatScore = 0;
+        }
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
         // 1.yöntem
         #region karakter sınırlama
@@ -133,24 +147,24 @@ void MoveCharacter()
     {
         isMiddle = true;
         // transform.position= new Vector3 (0, 0, 5);
-        myAnim.SetBool("Run", true);
+        //myAnim.SetBool("Run", true);
     }
 
     // Update is called once per frame
     void Update()
     {
-       
 
-MoveCharacter();
+
+        MoveCharacter();
     }
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.CompareTag("kaktus_1"))
         {
             Debug.Log("kaktus_1 çarptı" + other.gameObject.name);
-        
-            myAnim.SetBool("Death" , true);
-            isDeath = true;
+
+            myAnim.SetBool("Death", true);
+            isDead = true;
         }
 
     }
@@ -164,7 +178,7 @@ MoveCharacter();
             // Burada para toplama puanını artırabilirsin
         }
     }
-  
+
 
 
     private void FixedUpdate()
